@@ -26,11 +26,11 @@ export default function App() {
   const formattedRoi = 'R$ ' + roi.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   // Função principal para lidar com o envio
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: any) => {
     e.preventDefault(); // Impede o formulário de recarregar a página
 
     // 1. Capturar os dados do formulário de forma simples
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const data = {
       nome: formData.get('nome'),
       empresa: formData.get('empresa'),
