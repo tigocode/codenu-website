@@ -118,7 +118,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 brand-gradient rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-orange-500/20">C</div>
+              <div className="w-10 h-10 brand-gradient rounded-xl flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-orange-500/20">C</div>
 
               {/* LOGO */}
               <div className="flex items-center text-[32px] md:text-[34px] font-[700] text-[#1f2023] logo-font mt-1">
@@ -408,7 +408,7 @@ export default function App() {
       <footer className="py-16 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="w-8 h-8 brand-gradient rounded-lg flex items-center justify-center text-white text-xs font-bold">C</div>
+            <div className="w-8 h-8 brand-gradient rounded-lg flex items-center justify-center text-white text-2xl font-bold">C</div>
 
             {/* LOGO FOOTER */}
             <div className="flex items-center text-[24px] font-[700] text-[#1f2023] logo-font mt-1">
