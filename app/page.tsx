@@ -1,29 +1,42 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function App() {
   // Estados para a Calculadora de ROI
-  const [plants, setPlants] = useState(60);
+  const [plants, setPlants] = useState(15);
   const [manualHours, setManualHours] = useState(8);
   const [extraCosts, setExtraCosts] = useState(200);
-  const [roi, setRoi] = useState(0);
+
+  // NOVO AJUSTE: Estados separados para visão Mensal e Anual
+  const [roiAnnual, setRoiAnnual] = useState(0);
+  const [roiMonthly, setRoiMonthly] = useState(0);
+  const [hoursAnnual, setHoursAnnual] = useState(0);
+  const [hoursMonthly, setHoursMonthly] = useState(0);
 
   // Estado para o Formulário de Contacto
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Efeito para calcular o ROI sempre que os inputs mudarem
   useEffect(() => {
-    // 1. Horas economizadas (Custo da hora técnica estimado em 40€)
-    const hoursSaved = (manualHours * 0.65) * plants * 40 * 12;
-    // 2. Redução de custos extras e falhas reembolsáveis
-    const costSavings = (extraCosts * 0.3) * plants * 12;
+    // NOVO AJUSTE: Lógica atualizada para calcular Mensal e Anual
+    const hMonthly = manualHours * 0.80 * plants; // 80% do tempo economizado por mês (todas as usinas)
+    const hAnnual = hMonthly * 12;
 
-    const totalSavings = hoursSaved + costSavings;
-    setRoi(totalSavings);
+    setHoursMonthly(hMonthly);
+    setHoursAnnual(hAnnual);
+
+    // Economia Financeira: Valor da hora + Redução de custos extras
+    const moneyMonthly = (hMonthly * 40) + (extraCosts * 0.3 * plants);
+    const moneyAnnual = moneyMonthly * 12;
+
+    setRoiMonthly(moneyMonthly);
+    setRoiAnnual(moneyAnnual);
   }, [plants, manualHours, extraCosts]);
 
-  // Formatador de Moeda
-  const formattedRoi = 'R$ ' + roi.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // Formatadores de Moeda
+  const formattedRoiAnnual = 'R$ ' + roiAnnual.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const formattedRoiMonthly = 'R$ ' + roiMonthly.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   // Função principal para lidar com o envio
   const handleFormSubmit = (e: any) => {
@@ -74,11 +87,11 @@ export default function App() {
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .logo-font { font-family: 'Quicksand', sans-serif; letter-spacing: -0.02em; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-        .brand-gradient { background: linear-gradient(135deg, #F59E0B 0%, #6dd7b3ff 100%); }
-        .orange-bg { background-color: #F59E0B; }
+        .brand-gradient { background: linear-gradient(135deg, rgba(11, 70, 245, 1) 0%, #10B981 100%); }
+        .orange-bg { background-color: #50ad8eff; }
         .navy-bg { background-color: #0F172A; }
         .card-hover:hover { transform: translateY(-8px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .accent-orange { color: #F59E0B; }
+        .accent-orange { color: #50ad8eff; }
         
         /* Animação do Slider de Clientes */
         @keyframes scroll {
@@ -117,14 +130,12 @@ export default function App() {
       <nav className="fixed w-full z-50 glass border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 brand-gradient rounded-xl flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-orange-500/20">C</div>
-
+            <a href="#" className="flex items-center gap-3">
               {/* LOGO */}
-              <div className="flex items-center text-[32px] md:text-[34px] font-[700] text-[#1f2023] logo-font mt-1">
-                <span>codenu</span>
+              <div className="flex items-center text-[28px] md:text-[34px] font-[700] text-[#1f2023] logo-font mt-1">
+                <Image src="/logo-elo-sem-fundo.png" alt="Logo" width={80} height={80} />
               </div>
-            </div>
+            </a>
 
             <div className="hidden md:flex space-x-10 items-center">
               <a href="#solucoes" className="text-sm font-semibold text-slate-600 hover:text-orange-600 transition">Ecossistema</a>
@@ -141,7 +152,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
           <span className="inline-flex items-center px-4 py-1.5 mb-8 text-xs font-bold tracking-widest text-orange-700 uppercase bg-orange-100 rounded-full border border-orange-200">
             <span className="w-2 h-2 rounded-full bg-orange-500 mr-2 animate-pulse"></span>
-            A Stack Definitiva para Sua empresa
+            A Solução Definitiva para O&M
           </span>
           <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-[1.1] tracking-tight">
             Escalabilidade e Precisão <br />
@@ -152,8 +163,8 @@ export default function App() {
             Abandone o amadorismo das planilhas. Entregue relatórios de elite, controle gastos e automatize sua operação com as ferramentas que os maiores players do mercado utilizam.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-5">
-            <a href="#contato" className="px-10 py-5 orange-bg text-white rounded-2xl font-black text-lg shadow-xl shadow-orange-500/30 hover:scale-105 transition-transform">Impulsionar meu Negócio</a>
-            <a href="#solucoes" className="px-10 py-5 bg-white border-2 border-slate-200 text-slate-700 rounded-2xl font-black text-lg hover:bg-slate-50 transition-all">Conhecer o Combo</a>
+            <a href="#contato" className="px-10 py-5 orange-bg text-white rounded-2xl font-black text-lg shadow-xl shadow-green-500/30 hover:scale-105 transition-transform">Impulsionar meu Negócio</a>
+            <a href="#solucoes" className="px-10 py-5 bg-white border-2 border-slate-300 text-slate-700 rounded-2xl font-black text-lg hover:bg-slate-50 transition-all">Conhecer o Combo</a>
           </div>
         </div>
       </section>
@@ -161,54 +172,50 @@ export default function App() {
       {/* Seção Nossos Clientes (Slider Automático) */}
       <section id="clientes" className="py-12 bg-slate-50 border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-10">Quem confia na tecnologia Codenu</p>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.7em] mb-10">Quem confia na tecnologia Elo</p>
 
           <div className="slider-container">
             <div className="slider-track">
               {/* Itens Originais */}
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <img src="https://placehold.co/200x80/ffffff/94a3b8?text=ALIANÇA+SOLAR" alt="Aliança Solar" className="h-10 w-auto" />
-                  <span className="text-[9px] mt-2 font-black text-slate-400 uppercase tracking-widest">Aliança Solar</span>
+                  <img src="/M2e-Servicos-logo.png" alt="M2e Serviços" width={100} height={100} />
                 </div>
               </div>
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <img src="https://placehold.co/200x80/ffffff/94a3b8?text=M2e+SERVIÇOS" alt="M2e Serviços" className="h-10 w-auto" />
-                  <span className="text-[9px] mt-2 font-black text-slate-400 uppercase tracking-widest">M2e Serviços</span>
+                  <img src="/Alianca-logo-ajustado.png" alt="Aliança Solar" width={100} height={100} />
                 </div>
               </div>
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <div className="h-10 w-32 bg-slate-200 rounded flex items-center justify-center font-bold text-slate-400 text-xs">SOLAR TECH</div>
+                  <img src="/M2e-Servicos-logo.png" alt="M2e Serviços" width={100} height={100} />
                 </div>
               </div>
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <div className="h-10 w-32 bg-slate-200 rounded flex items-center justify-center font-bold text-slate-400 text-xs">O&M EXPERT</div>
+                  <img src="/Alianca-logo-ajustado.png" alt="Aliança Solar" width={100} height={100} />
                 </div>
               </div>
               {/* Duplicação para loop infinito */}
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <img src="https://placehold.co/200x80/ffffff/94a3b8?text=ALIANÇA+SOLAR" alt="Aliança Solar" className="h-10 w-auto" />
-                  <span className="text-[9px] mt-2 font-black text-slate-400 uppercase tracking-widest">Aliança Solar</span>
+                  <img src="/M2e-Servicos-logo.png" alt="M2e Serviços" width={100} height={100} />
                 </div>
               </div>
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <img src="https://placehold.co/200x80/ffffff/94a3b8?text=M2e+SERVIÇOS" alt="M2e Serviços" className="h-10 w-auto" />
-                  <span className="text-[9px] mt-2 font-black text-slate-400 uppercase tracking-widest">M2e Serviços</span>
+                  <img src="/Alianca-logo-ajustado.png" alt="Aliança Solar" width={100} height={100} />
                 </div>
               </div>
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <div className="h-10 w-32 bg-slate-200 rounded flex items-center justify-center font-bold text-slate-400 text-xs">SOLAR TECH</div>
+                  <img src="/M2e-Servicos-logo.png" alt="M2e Serviços" width={100} height={100} />
                 </div>
               </div>
               <div className="slider-item">
                 <div className="flex flex-col items-center">
-                  <div className="h-10 w-32 bg-slate-200 rounded flex items-center justify-center font-bold text-slate-400 text-xs">O&M EXPERT</div>
+                  <img src="/Alianca-logo-ajustado.png" alt="Aliança Solar" width={100} height={100} />
                 </div>
               </div>
             </div>
@@ -227,14 +234,14 @@ export default function App() {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Solar Manager */}
             <div className="p-10 bg-slate-50 rounded-3xl border border-slate-100 card-hover">
-              <div className="w-14 h-14 orange-bg rounded-2xl flex items-center justify-center mb-8 text-white shadow-lg shadow-orange-500/40">
+              <div className="w-14 h-14 orange-bg rounded-2xl flex items-center justify-center mb-8 text-white shadow-lg shadow-green-500/40">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
               <h3 className="text-2xl font-black mb-4 text-slate-900 logo-font">Solar Manager</h3>
               <p className="text-slate-600 leading-relaxed mb-6 text-sm">O cérebro da sua operação. Gestão de Ordens de Serviço, manutenção preventiva e alertas inteligentes para nunca ser pego de surpresa.</p>
-              <span className="text-orange-600 font-bold text-[12px] uppercase tracking-wider">Foco: Operação e Manutenção</span>
+              <span className="text-orange-600 font-bold text-[10px] uppercase tracking-wider">Foco: Operação e Manutenção</span>
             </div>
 
             {/* ReembolsarApp */}
@@ -246,12 +253,12 @@ export default function App() {
               </div>
               <h3 className="text-2xl font-black mb-4 text-slate-900 logo-font">ReembolsarApp</h3>
               <p className="text-slate-600 leading-relaxed mb-6 text-sm">Controle financeiro rigoroso. Gestão de atividades, criação de relatórios técnicos profissionais e domínio total sobre gastos reembolsáveis.</p>
-              <span className="text-emerald-600 font-bold text-[12px] uppercase tracking-wider">Foco: Gestão e Financeiro</span>
+              <span className="text-emerald-600 font-bold text-[10px] uppercase tracking-wider">Foco: Gestão e Financeiro</span>
             </div>
 
             {/* SolarVision */}
             <div className="p-10 bg-slate-50 rounded-3xl border border-slate-100 card-hover relative overflow-hidden">
-              <div className="absolute top-4 right-4 bg-orange-100 text-orange-600 text-[12px] font-black px-2 py-1 rounded">EM IMPLEMENTAÇÃO</div>
+              <div className="absolute top-4 right-4 bg-orange-100 text-orange-600 text-[10px] font-black px-2 py-1 rounded">EM IMPLEMENTAÇÃO</div>
               <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-8 text-white shadow-lg shadow-blue-500/40">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -260,7 +267,7 @@ export default function App() {
               </div>
               <h3 className="text-2xl font-black mb-4 text-slate-900 logo-font">SolarVision IA</h3>
               <p className="text-slate-600 leading-relaxed mb-6 text-sm">Análise termográfica avançada com IA. Gere relatórios técnicos e comerciais de alta precisão que encantam o cliente final.</p>
-              <span className="text-blue-600 font-bold text-[12px] uppercase tracking-wider">Foco: Análise e Termografia</span>
+              <span className="text-blue-600 font-bold text-[10px] uppercase tracking-wider">Foco: Análise e Termografia</span>
             </div>
           </div>
         </div>
@@ -279,17 +286,17 @@ export default function App() {
               <input
                 type="range"
                 min="1"
-                max="200"
+                max="100"
                 value={plants}
                 onChange={(e) => setPlants(Number(e.target.value))}
-                className="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                className="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-green-500"
               />
               <div className="flex justify-between mt-4">
-                <span className="text-slate-500 font-bold">1 Usina</span>
-                <div className="bg-orange-500 px-6 py-2 rounded-full font-black text-2xl shadow-lg shadow-orange-500/20">
+                <span className="text-slate-400 font-bold">1 Usina</span>
+                <div className="bg-green-500 px-6 py-2 rounded-full font-black text-2xl shadow-lg shadow-green-500/20">
                   {plants}
                 </div>
-                <span className="text-slate-500 font-bold">200 Usinas</span>
+                <span className="text-slate-400 font-bold">100 Usinas</span>
               </div>
             </div>
 
@@ -300,7 +307,7 @@ export default function App() {
                   type="number"
                   value={manualHours}
                   onChange={(e) => setManualHours(Number(e.target.value))}
-                  className="w-full bg-slate-700 border-none rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-orange-500 outline-none"
+                  className="w-full bg-slate-700 border-none rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-green-500 outline-none"
                 />
               </div>
               <div>
@@ -309,17 +316,74 @@ export default function App() {
                   type="number"
                   value={extraCosts}
                   onChange={(e) => setExtraCosts(Number(e.target.value))}
-                  className="w-full bg-slate-700 border-none rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-orange-500 outline-none"
+                  className="w-full bg-slate-700 border-none rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-green-500 outline-none"
                 />
               </div>
             </div>
 
+            {/* NOVO AJUSTE: Visão Mensal em destaque principal, seguida da projeção Anual (12 meses) */}
             <div className="py-10 border-t border-slate-700">
-              <p className="text-slate-400 font-medium mb-2 uppercase text-xs tracking-widest">Potencial de Otimização Anual</p>
-              <div className="text-6xl font-black text-orange-500">{formattedRoi}</div>
-              <p className="text-slate-500 mt-6 text-sm max-w-md mx-auto">
-                Com a Codenu, você reduz em até 65% o tempo administrativo e elimina erros de cobrança reembolsável.
-              </p>
+              <div className="grid md:grid-cols-2 gap-8 items-stretch">
+                {/* Bloco 1: Retorno Monetário */}
+                <div className="text-left flex flex-col justify-center">
+                  <p className="text-slate-400 font-medium mb-2 uppercase text-xs tracking-widest">Economia Financeira</p>
+                  <div className="flex flex-col mb-4">
+                    {/* Destaque Mensal */}
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <span className="text-4xl md:text-5xl font-black text-[#F59E0B]">{formattedRoiMonthly}</span>
+                      <span className="text-slate-500 font-bold text-lg uppercase tracking-wider">/Mês</span>
+                    </div>
+                    {/* Projeção Anual (12 meses) */}
+                    <div className="inline-block mt-2 bg-slate-700/50 rounded-lg px-4 py-3 border border-slate-600/50 w-fit">
+                      <span className="text-slate-300 font-medium">Economia projetada de <span className="text-[#F59E0B] font-bold">{formattedRoiAnnual}</span> em 12 meses</span>
+                    </div>
+                  </div>
+                  <p className="text-slate-400 text-sm mt-2 max-w-sm">
+                    Calculado com base na valorização da hora técnica e redução de erros operacionais.
+                  </p>
+                </div>
+
+                {/* Bloco 2: Retorno em Tempo */}
+                <div className="bg-slate-700/40 rounded-3xl p-6 border border-slate-600/50 text-left relative overflow-hidden flex flex-col justify-center">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#6dd7b3]/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                  <p className="text-slate-400 font-medium mb-2 uppercase text-xs tracking-widest">Tempo Recuperado</p>
+
+                  <div className="flex flex-col mb-5">
+                    {/* Destaque Mensal */}
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl md:text-5xl font-black text-[#6dd7b3]">{hoursMonthly.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</span>
+                      <span className="text-[#6dd7b3]/60 font-bold text-lg uppercase tracking-wider">Horas/Mês</span>
+                    </div>
+                    {/* Projeção Anual (12 meses) */}
+                    <div className="inline-block mt-2 bg-slate-800/50 rounded-lg px-4 py-2 border border-slate-600/50 w-fit">
+                      <span className="text-slate-300 font-medium text-sm">Ou <span className="text-[#6dd7b3] font-bold">{hoursAnnual.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} horas</span> poupadas em 1 ano</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-[#6dd7b3]/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <svg className="w-4 h-4 text-[#6dd7b3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                      </div>
+                      <p className="text-slate-300 text-sm font-medium">Economia garantida de <span className="text-white font-bold">80% do tempo</span> em relatórios.</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-[#6dd7b3]/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <svg className="w-4 h-4 text-[#6dd7b3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                      </div>
+                      <p className="text-slate-300 text-sm font-medium">Equivalente a <span className="text-white font-bold">{Math.round(hoursMonthly / 8)} dias úteis</span> livres por mês para novos negócios.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Botão CTA */}
+              <div className="mt-10 pt-8 border-t border-slate-700/50 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
+                <p className="text-slate-400 text-sm max-w-sm">Pare de desperdiçar o potencial da sua equipe em tarefas que a Solsas faz em segundos.</p>
+                <a href="#contato" className="inline-block px-8 py-4 bg-[#6dd7b3] text-[#0F172A] rounded-xl font-black text-lg hover:opacity-90 hover:scale-105 transition-all shadow-lg shadow-[#6dd7b3]/20 w-full md:w-auto text-center">
+                  Quero estes resultados
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -332,7 +396,7 @@ export default function App() {
             <div>
               <h2 className="text-5xl font-black mb-8 leading-tight text-slate-900">Chegou a hora de ser <span className="accent-orange">Referência.</span></h2>
               <p className="text-xl text-slate-600 mb-10 leading-relaxed">
-                Escolha a ferramenta individual ou o **Combo Codenu** para dominar o mercado de O&M. Nossa equipe técnica está pronta para configurar sua nova central de comando.
+                Escolha a ferramenta individual ou o **Combo Elo** para dominar o mercado de O&M. Nossa equipe técnica está pronta para configurar sua nova central de comando.
               </p>
 
               <div className="space-y-6">
@@ -367,26 +431,21 @@ export default function App() {
               {!isSubmitted ? (
                 <form onSubmit={handleFormSubmit} className="relative z-10 space-y-5">
                   <h3 className="text-2xl font-bold text-white mb-6">Solicitar Apresentação</h3>
-
                   <div className="grid grid-cols-2 gap-4">
-                    <input name="nome" required type="text" placeholder="Nome" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-orange-500 outline-none" />
-                    <input name="empresa" required type="text" placeholder="Empresa" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-orange-500 outline-none" />
+                    <input required type="text" placeholder="Nome" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-green-500 outline-none" />
+                    <input required type="text" placeholder="Empresa" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-green-500 outline-none" />
                   </div>
+                  <input required type="email" placeholder="E-mail Corporativo" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-green-500 outline-none" />
+                  <input required type="tel" placeholder="WhatsApp (com DDD)" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-green-500 outline-none" />
 
-                  <input name="email" required type="email" placeholder="E-mail Corporativo" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-orange-500 outline-none" />
-
-                  <input name="whatsapp" required type="tel" placeholder="WhatsApp (com DDD)" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-orange-500 outline-none" />
-
-                  <select name="ferramenta" className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white focus:ring-2 focus:ring-orange-500 outline-none appearance-none">
-                    <option value="Combo Codenu">Combo Codenu (Todas as Ferramentas)</option>
-                    <option value="Solar Manager">Somente Solar Manager</option>
-                    <option value="ReembolsarApp">Somente ReembolsarApp</option>
-                    <option value="SolarVision IA">Lista de Espera SolarVision IA</option>
+                  <select className="w-full bg-slate-800 border-none rounded-xl px-5 py-4 text-white focus:ring-2 focus:ring-green-500 outline-none appearance-none">
+                    <option>Combo Elo (Todas as Ferramentas)</option>
+                    <option>Somente Solar Manager</option>
+                    <option>Somente ReembolsarApp</option>
+                    <option>Lista de Espera SolarVision IA</option>
                   </select>
 
-                  <button type="submit" className="w-full py-5 bg-orange-500 text-white rounded-xl font-black text-xl hover:bg-orange-600 shadow-xl shadow-orange-500/20 transition-all">
-                    Começar Transformação
-                  </button>
+                  <button type="submit" className="w-full py-5 orange-bg text-white rounded-xl font-black text-xl hover:bg-orange-600 shadow-xl shadow-green-500/20 transition-all">Começar Transformação</button>
                 </form>
               ) : (
                 <div className="relative z-10 text-center py-12">
@@ -408,19 +467,17 @@ export default function App() {
       <footer className="py-16 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="w-8 h-8 brand-gradient rounded-lg flex items-center justify-center text-white text-2xl font-bold">C</div>
-
             {/* LOGO FOOTER */}
             <div className="flex items-center text-[24px] font-[700] text-[#1f2023] logo-font mt-1">
-              <span>codenu</span>
+              <Image src="/logo-elo-sem-fundo.png" alt="Logo" width={70} height={70} />
             </div>
           </div>
-          <div className="flex justify-center space-x-8 mb-8 text-sm font-bold text-slate-400">
-            <a href="#" className="hover:text-orange-500 transition">Privacidade</a>
-            <a href="#" className="hover:text-orange-500 transition">Termos</a>
-            <a href="#" className="hover:text-orange-500 transition">LinkedIn</a>
+          <div className="flex justify-center space-x-8 mb-8 text-sm font-bold text-slate-500">
+            <a href="#" className="hover:text-green-500 transition">Privacidade</a>
+            <a href="#" className="hover:text-green-500 transition">Termos</a>
+            <a href="#" className="hover:text-green-500 transition">LinkedIn</a>
           </div>
-          <p className="text-slate-400 text-[10px] tracking-widest font-black uppercase">© 2024 CODENU TECNOLOGIA. FEITO PARA QUEM MOVE O MERCADO SOLAR.</p>
+          <p className="text-slate-500 text-[10px] tracking-widest font-black uppercase">© 2024 ELO TECNOLOGIA. FEITO PARA QUEM MOVE O MERCADO SOLAR.</p>
         </div>
       </footer>
     </div>
