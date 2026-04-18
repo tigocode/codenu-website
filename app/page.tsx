@@ -152,7 +152,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
           <span className="inline-flex items-center px-4 py-1.5 mb-8 text-xs font-bold tracking-widest text-orange-700 uppercase bg-orange-100 rounded-full border border-orange-200">
             <span className="w-2 h-2 rounded-full bg-orange-500 mr-2 animate-pulse"></span>
-            A Solução Definitiva para O&M
+            A Solução Definitiva para sua empresa
           </span>
           <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-[1.1] tracking-tight">
             Escalabilidade e Precisão <br />
@@ -233,7 +233,7 @@ export default function App() {
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Solar Manager */}
-            <div className="p-10 bg-slate-50 rounded-3xl border border-slate-100 card-hover">
+            <div className="p-10 bg-slate-50 rounded-2xl border border-slate-100 card-hover">
               <div className="w-14 h-14 orange-bg rounded-2xl flex items-center justify-center mb-8 text-white shadow-lg shadow-green-500/40">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -241,7 +241,10 @@ export default function App() {
               </div>
               <h3 className="text-2xl font-black mb-4 text-slate-900 logo-font">Solar Manager</h3>
               <p className="text-slate-600 leading-relaxed mb-6 text-sm">O cérebro da sua operação. Gestão de Ordens de Serviço, manutenção preventiva e alertas inteligentes para nunca ser pego de surpresa.</p>
-              <span className="text-orange-600 font-bold text-[10px] uppercase tracking-wider">Foco: Operação e Manutenção</span>
+              <a href="https://cta-manager.codenu.com.br/" target="_blank" rel="noopener noreferrer" className="flex gap-1">
+                <span className="text-orange-600 font-bold text-[10px] uppercase tracking-wider mb-6">Foco: Operação e Manutenção</span>
+                <span className="text-orange-600 font-bold text-[10px] tracking-wider">(Saiba mais)</span>
+              </a>
             </div>
 
             {/* ReembolsarApp */}
