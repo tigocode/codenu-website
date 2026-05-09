@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "codenu",
-  description: "SaaS para gestão de empresas",
+  title: "Elo - Automação de Gestão para Empresas",
+  description: "A Elo é uma plataforma inovadora projetada para transformar a maneira como sua empresa gerencia suas operações. ",
 };
 
 export default function RootLayout({

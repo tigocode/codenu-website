@@ -138,9 +138,9 @@ export default function App() {
             </a>
 
             <div className="hidden md:flex space-x-10 items-center">
-              <a href="#solucoes" className="text-sm font-semibold text-slate-600 hover:text-orange-600 transition">Ecossistema</a>
-              <a href="#clientes" className="text-sm font-semibold text-slate-600 hover:text-orange-600 transition">Clientes</a>
-              <a href="#roi" className="text-sm font-semibold text-slate-600 hover:text-orange-600 transition">Calculadora</a>
+              <a href="#solucoes" className="text-sm font-semibold text-slate-600 hover:text-orange-600 transition">Soluções</a>
+              <a href="#clientes" className="text-sm font-semibold text-slate-600 hover:text-orange-600 transition">Quem Confia</a>
+              <a href="#roi" className="text-sm font-semibold text-slate-600 hover:text-orange-600 transition">Simule sua Economia</a>
               <a href="#contato" className="orange-bg text-white px-6 py-2.5 rounded-full text-sm font-bold hover:shadow-lg hover:bg-orange-600 transition-all">Agendar Demonstração</a>
             </div>
           </div>
@@ -382,7 +382,7 @@ export default function App() {
 
               {/* Botão CTA */}
               <div className="mt-10 pt-8 border-t border-slate-700/50 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
-                <p className="text-slate-400 text-sm max-w-sm">Pare de desperdiçar o potencial da sua equipe em tarefas que a Solsas faz em segundos.</p>
+                <p className="text-slate-400 text-sm max-w-sm">Pare de desperdiçar o potencial da sua equipe em tarefas que as soluções Elo faz em segundos.</p>
                 <a href="#contato" className="inline-block px-8 py-4 bg-[#6dd7b3] text-[#0F172A] rounded-xl font-black text-lg hover:opacity-90 hover:scale-105 transition-all shadow-lg shadow-[#6dd7b3]/20 w-full md:w-auto text-center">
                   Quero estes resultados
                 </a>
